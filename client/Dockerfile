@@ -13,8 +13,8 @@ COPY . .
 # NEXT_PUBLIC_* vars must be present at build time to be inlined into the bundle.
 # Provide sensible defaults for local / compose usage; override via --build-arg.
 ARG NEXT_PUBLIC_API_URL=http://localhost:5000
-ARG NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=placeholder
+ARG NEXT_PUBLIC_SUPABASE_URL=""
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=""
 ARG NEXT_PUBLIC_MAPBOX_TOKEN=""
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
