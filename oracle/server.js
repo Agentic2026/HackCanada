@@ -75,6 +75,10 @@ app.post('/api/query', async (req, res) => {
 
 // ── HEALTH & INFO ─────────────────────────────────────────────────────────────
 
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+});
+
 app.get('/', (req, res) => {
     res.json({
         name: 'Housing Oracle Debate System',
@@ -87,7 +91,8 @@ app.get('/', (req, res) => {
             },
             debate: {
                 query: 'POST /api/query'
-            }
+            },
+            health: 'GET /health'
         }
     });
 });
@@ -112,6 +117,7 @@ app.listen(PORT, () => {
     console.log(`  Mode: ${process.env.BACKBOARD_API_KEY ? 'LIVE' : 'MOCK'}`);
     console.log('═'.repeat(60));
     console.log('\nEndpoints:');
+    console.log('  GET    /health');
     console.log('  POST   /auth/signup');
     console.log('  POST   /auth/login');
     console.log('  GET    /auth/me/:userId');

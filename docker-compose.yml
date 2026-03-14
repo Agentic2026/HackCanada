@@ -1,0 +1,47 @@
+# docker-compose.yml — HackCanada local development / CI
+#
+# Quick start:
+#   docker compose up --build
+#
+# The frontend is reachable at http://localhost:3000
+# The backend  is reachable at http://localhost:5000
+#
+# To use pre-built GHCR images instead of building locally:
+#   docker compose pull && docker compose up
+
+services:
+  # ── Oracle (Express API) ──────────────────────────────────────────────────
+  oracle:
+    image: ghcr.io/agentic2026/hackcanada:oracle-latest
+    build:
+      context: ./oracle
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      # External services — supply real values via a .env file or shell env
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY:-}
+      BACKBOARD_API_KEY: ${BACKBOARD_API_KEY:-}
+      BACKBOARD_ASSISTANT_ID: ${BACKBOARD_ASSISTANT_ID:-}
+    restart: unless-stopped
+
+  # ── Client (Next.js frontend) ────────────────────────────────────────────
+  client:
+    image: ghcr.io/agentic2026/hackcanada:client-latest
+    build:
+      context: ./client
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:5000}
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+        NEXT_PUBLIC_MAPBOX_TOKEN: ${NEXT_PUBLIC_MAPBOX_TOKEN:-}
+    ports:
+      - "3000:3000"
+    environment:
+      # Server-side only secrets (not baked into the JS bundle)
+      ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY:-}
+      ELEVENLABS_VOICE_ID: ${ELEVENLABS_VOICE_ID:-}
+    depends_on:
+      - oracle
+    restart: unless-stopped
