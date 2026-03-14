@@ -1,7 +1,8 @@
 // backboard.js — Backboard SDK client singleton
 import { BackboardClient } from 'backboard-sdk';
-import 'dotenv/config';
+import './env.js';
 
-const client = new BackboardClient({ apiKey: process.env.BACKBOARD_API_KEY });
+const apiKey = process.env.BACKBOARD_API_KEY;
+const client = apiKey ? new BackboardClient({ apiKey }) : null;
 
 export default client;
